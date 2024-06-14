@@ -1,118 +1,137 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { useState, useEffect } from "react"
+import { Alert, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const App = () => {
+  let countDownTimer = 0;
+  const [counter, setCounter] = useState(0)
+  const [inputText, setInputText] = useState("")
+  const [timer, setTimer] = useState<NodeJS.Timeout>()
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  useEffect(() => {
+    return () => clearInterval(timer);
+  }, [countDownTimer]);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const getReturnValues = (countDown: number) => {
+    // calculate time left
+    let days = Math.floor(countDown / (3600 * 24));
+    let hours = Math.floor((countDown % (3600 * 24)) / 3600);
+    let minutes = Math.floor((countDown % 3600) / 60);
+    let seconds = countDown % 60;
+    return [formatTime(days), formatTime(hours), formatTime(minutes), formatTime(seconds)];
   };
 
+  function formatTime(units: number) {
+    return units < 10 ? '0' + units : units
+  }
+
+  function startTimer() {
+    stopTimer()
+    countDownTimer = counter == 0 ? parseFloat(inputText) : counter
+    if (!isNaN(countDownTimer)) {
+      if (countDownTimer == 0) {
+        Alert.alert('Alert', 'Input should be greater than 0')
+      }
+      else {
+        const timer = setInterval(() => {
+          if (countDownTimer == 0) {
+            clearInterval(timer)
+            Alert.alert('Congo', 'Countdown Complete', [{
+              text: "OK",
+              onPress: () => resetTimer()
+            }], { cancelable: false })
+          }
+          else {
+            countDownTimer = countDownTimer - 1
+            setCounter(countDownTimer);
+          }
+
+        }, 1000);
+        setTimer(timer)
+      }
+    }
+    else {
+      Alert.alert('Alert', 'Wrong Input')
+    }
+  }
+
+  function stopTimer() {
+    clearInterval(timer)
+    console.log(counter)
+  }
+
+  function resetTimer() {
+    countDownTimer = 0
+    setCounter(countDownTimer)
+    setInputText('')
+    clearInterval(timer)
+  }
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={styles.viewStyle}>
+      <Text>Enter your text:</Text>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '50%', marginTop: 5 }}
+        onChangeText={(text) => {
+          countDownTimer = parseFloat(text)
+          setInputText(text)
+        }}
+        maxLength={10}
+        keyboardType='number-pad'
+        value={inputText}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+      <View style={{ alignItems: 'center' }}>
+        <Text style={[styles.textStyle]}>
+          {`${getReturnValues(counter)[0]}:${getReturnValues(counter)[1]}:${getReturnValues(counter)[2]}:${getReturnValues(counter)[3]}`}
+        </Text>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
+        <TouchableOpacity onPress={() => {
+          Keyboard.dismiss();
+          startTimer();
+        }} style={[styles.buttonStyle, { backgroundColor: 'green' }]}>
+          <Text style={styles.buttonTextStyle}>Start</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          Keyboard.dismiss();
+          stopTimer();
+        }} style={[styles.buttonStyle, { backgroundColor: 'red' }]}>
+          <Text style={styles.buttonTextStyle}>Stop</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          Keyboard.dismiss();
+          resetTimer();
+        }} style={[styles.buttonStyle, { backgroundColor: 'orange' }]}>
+          <Text style={styles.buttonTextStyle}>Reset</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+export default App
 
-export default App;
+const styles = StyleSheet.create({
+  textStyle: {
+    marginTop: 20,
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 400,
+  },
+  viewStyle: {
+    backgroundColor: 'white',
+    flex: 0.6,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonStyle: {
+    marginTop: 8,
+    padding: 15,
+    marginHorizontal: 5,
+    borderRadius: 8
+  },
+  buttonTextStyle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500'
+  }
+})
