@@ -13,6 +13,7 @@ import MyNavigationContainer from './Drawer';
 import { Provider } from 'react-redux';
 import { store } from './src/ReduxStore';
 import ReduxTest from './src/Screen/ReduxTest';
+import AnimationDemo from './src/Screen/AnimationDemo';
 
 // AppRegistry.registerComponent(appName, () => App);
 
@@ -24,8 +25,12 @@ import ReduxTest from './src/Screen/ReduxTest';
         //     <ContextTest />
         // </MyProvider>
 
+        // <Provider store={store}>
+        //     <ReduxTest />
+        // </Provider>
+
         <Provider store={store}>
-            <ReduxTest />
+            <AnimationDemo />
         </Provider>
     );
 }
