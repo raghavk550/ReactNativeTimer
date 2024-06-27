@@ -16,6 +16,7 @@ import ReduxTest from './src/Screen/ReduxTest';
 import AnimationDemo from './src/Screen/AnimationDemo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GestureDemo from './src/Screen/GestureDemo';
+import LottieAnimationView from './src/Screen/Lottie';
 
 // AppRegistry.registerComponent(appName, () => App);
 
@@ -35,14 +36,16 @@ import GestureDemo from './src/Screen/GestureDemo';
         //     <AnimationDemo />
         // </Provider>
 
-        <Provider store={store}>
-            <GestureHandlerRootView>
-                <GestureDemo />
-            </GestureHandlerRootView>
-        </Provider>
+        // <Provider store={store}>
+        //     <GestureHandlerRootView>
+        //         <GestureDemo />
+        //     </GestureHandlerRootView>
+        // </Provider>
+
+        <LottieAnimationView />
     );
 }
 
 // AppRegistry.registerComponent(appName, () => ContextApp)
 
-AppRegistry.registerComponent(appName, () => MyNavigationContainer)
+AppRegistry.registerComponent(appName, () => LottieAnimationView/*MyNavigationContainer*/)
