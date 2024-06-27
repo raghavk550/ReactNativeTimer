@@ -14,6 +14,8 @@ import { Provider } from 'react-redux';
 import { store } from './src/ReduxStore';
 import ReduxTest from './src/Screen/ReduxTest';
 import AnimationDemo from './src/Screen/AnimationDemo';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import GestureDemo from './src/Screen/GestureDemo';
 
 // AppRegistry.registerComponent(appName, () => App);
 
@@ -29,8 +31,14 @@ import AnimationDemo from './src/Screen/AnimationDemo';
         //     <ReduxTest />
         // </Provider>
 
+        // <Provider store={store}>
+        //     <AnimationDemo />
+        // </Provider>
+
         <Provider store={store}>
-            <AnimationDemo />
+            <GestureHandlerRootView>
+                <GestureDemo />
+            </GestureHandlerRootView>
         </Provider>
     );
 }

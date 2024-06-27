@@ -3,8 +3,8 @@ import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
 import { useHeaderHeight } from '@react-navigation/elements';
 
 const AnimationDemo = () => {
-    const width = useSharedValue(100)
-    const height = useSharedValue(100)
+    const width = useSharedValue(40)
+    const height = useSharedValue(40)
     const backgroundColor = useSharedValue("red")
 
     const translateX = useSharedValue(0);
@@ -13,8 +13,8 @@ const AnimationDemo = () => {
     const headerHeight = useHeaderHeight()
 
     const handlePress = () => {
-        width.value = withSpring(generateRandomNumber(100, 200));
-        height.value = withSpring(generateRandomNumber(100, 200));
+        width.value = withSpring(generateRandomNumber(40, 80));
+        height.value = withSpring(generateRandomNumber(40, 80));
         backgroundColor.value = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
 
         handlePressForX()
