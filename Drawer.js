@@ -1,7 +1,6 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
-import { ContextApp } from ".";
-
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
+import {ContextApp} from '.';
 
 const Drawer = createDrawerNavigator();
 
@@ -15,9 +14,9 @@ function MyDrawer() {
 }
 
 export default function MyNavigationContainer() {
-    return (
-        <NavigationContainer>
-            <MyDrawer/>
-        </NavigationContainer>
-    )
+  return (
+    <NavigationContainer>
+      <MyDrawer />
+    </NavigationContainer>
+  );
 }

@@ -1,8 +1,16 @@
 // import { useState, useEffect } from "react"
 // import { Alert, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 
-import React from "react"
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, Keyboard, Alert, Image } from "react-native"
+import React from 'react';
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Keyboard,
+  Alert,
+} from 'react-native';
 
 // const App = () => {
 //   let countDownTimer = 0;
@@ -139,13 +147,16 @@ import { Text, View, TextInput, StyleSheet, TouchableOpacity, Keyboard, Alert, I
 //   }
 // })
 
-class App extends React.Component<{}, { counter: number, inputText: string, timer: NodeJS.Timeout | undefined }> {
+class App extends React.Component<
+  {},
+  {counter: number; inputText: string; timer: NodeJS.Timeout | undefined}
+> {
   constructor(props: any) {
     super(props);
     this.state = {
       counter: 0,
-      inputText: "",
-      timer: undefined
+      inputText: '',
+      timer: undefined,
     };
   }
 
@@ -156,69 +167,84 @@ class App extends React.Component<{}, { counter: number, inputText: string, time
       let hours = Math.floor((countDown % (3600 * 24)) / 3600);
       let minutes = Math.floor((countDown % 3600) / 60);
       let seconds = countDown % 60;
-      return [this.formatTime(days), this.formatTime(hours), this.formatTime(minutes), this.formatTime(seconds)];
+      return [
+        this.formatTime(days),
+        this.formatTime(hours),
+        this.formatTime(minutes),
+        this.formatTime(seconds),
+      ];
+    } else {
+      return [
+        this.formatTime(countDown),
+        this.formatTime(countDown),
+        this.formatTime(countDown),
+        this.formatTime(countDown),
+      ];
     }
-    else {
-      return [this.formatTime(countDown), this.formatTime(countDown), this.formatTime(countDown), this.formatTime(countDown)]
-    }
-  };
+  }
 
   formatTime(units: number) {
-    return units < 10 ? '0' + units : units
+    return units < 10 ? '0' + units : units;
   }
 
   startTimer = () => {
     Keyboard.dismiss();
-    this.stopTimer()
+    this.stopTimer();
     if (!isNaN(parseFloat(this.state.inputText))) {
       this.setState({
-        counter: this.state.counter == 0 ? parseFloat(this.state.inputText) : this.state.counter
-      })
+        counter:
+          this.state.counter == 0
+            ? parseFloat(this.state.inputText)
+            : this.state.counter,
+      });
       if (this.state.counter == 0) {
-        Alert.alert('Alert', 'Input should be greater than 0')
-      }
-      else {
+        Alert.alert('Alert', 'Input should be greater than 0');
+      } else {
         const timer = setInterval(() => {
           if (this.state.counter == 0) {
-            clearInterval(timer)
-            Alert.alert('Congo', 'Countdown Complete', [{
-              text: "OK",
-              onPress: () => this.resetTimer()
-            }], { cancelable: false })
-          }
-          else {
+            clearInterval(timer);
+            Alert.alert(
+              'Congo',
+              'Countdown Complete',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => this.resetTimer(),
+                },
+              ],
+              {cancelable: false},
+            );
+          } else {
             this.setState({
-              counter: this.state.counter - 1
-            })
+              counter: this.state.counter - 1,
+            });
           }
-
         }, 1000);
         this.setState({
-          timer: timer
-        })
+          timer: timer,
+        });
       }
+    } else {
+      Alert.alert('Alert', 'Wrong Input');
     }
-    else {
-      Alert.alert('Alert', 'Wrong Input')
-    }
-  }
+  };
 
   stopTimer = () => {
     Keyboard.dismiss();
-    clearInterval(this.state.timer)
-  }
+    clearInterval(this.state.timer);
+  };
 
   resetTimer = () => {
     Keyboard.dismiss();
     this.setState({
       counter: 0,
-      inputText: ''
-    })
-    clearInterval(this.state.timer)
-  }
+      inputText: '',
+    });
+    clearInterval(this.state.timer);
+  };
 
   componentWillUnmount() {
-    clearInterval(this.state.timer)
+    clearInterval(this.state.timer);
   }
 
   render() {
@@ -226,33 +252,59 @@ class App extends React.Component<{}, { counter: number, inputText: string, time
       <View style={styles.viewStyle}>
         <Text>Enter your text:</Text>
         <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '50%', marginTop: 5 }}
-          onChangeText={(text) => {
+          style={{
+            height: 40,
+            borderColor: 'gray',
+            borderWidth: 1,
+            width: '50%',
+            marginTop: 5,
+          }}
+          onChangeText={text => {
             this.setState({
               inputText: text,
-              counter: !isNaN(parseFloat(text)) ? parseFloat(text) : this.state.counter
-            })
+              counter: !isNaN(parseFloat(text))
+                ? parseFloat(text)
+                : this.state.counter,
+            });
           }}
           maxLength={10}
-          keyboardType='number-pad'
+          keyboardType="number-pad"
           value={this.state.inputText}
         />
-        <View style={{ alignItems: 'center' }}>
+        <View style={{alignItems: 'center'}}>
           <Text style={[styles.textStyle]}>
-            {`${this.getReturnValues(this.state.counter)[0]}:${this.getReturnValues(this.state.counter)[1]}:${this.getReturnValues(this.state.counter)[2]}:${this.getReturnValues(this.state.counter)[3]}`}
+            {`${this.getReturnValues(this.state.counter)[0]}:${
+              this.getReturnValues(this.state.counter)[1]
+            }:${this.getReturnValues(this.state.counter)[2]}:${
+              this.getReturnValues(this.state.counter)[3]
+            }`}
           </Text>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
-          <CustomButton title="Start" color="green" pressFunction={this.startTimer}></CustomButton>
-          <CustomButton title="Stop" color="red" pressFunction={this.stopTimer}></CustomButton>
-          <CustomButton title="Reset" color="orange" pressFunction={this.resetTimer}></CustomButton>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <CustomButton
+            title="Start"
+            color="green"
+            pressFunction={this.startTimer}></CustomButton>
+          <CustomButton
+            title="Stop"
+            color="red"
+            pressFunction={this.stopTimer}></CustomButton>
+          <CustomButton
+            title="Reset"
+            color="orange"
+            pressFunction={this.resetTimer}></CustomButton>
         </View>
       </View>
-    )
+    );
   }
 }
 
-export default App
+export default App;
 
 const styles = StyleSheet.create({
   textStyle: {
@@ -265,27 +317,29 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 0.6,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonStyle: {
     marginTop: 8,
     padding: 15,
     marginHorizontal: 5,
-    borderRadius: 8
+    borderRadius: 8,
   },
   buttonTextStyle: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '500'
-  }
-})
+    fontWeight: '500',
+  },
+});
 
 const CustomButton = (props: any) => {
-  return(
-    <TouchableOpacity style={[styles.buttonStyle, {backgroundColor: props.color}]} onPress={props.pressFunction}>
+  return (
+    <TouchableOpacity
+      style={[styles.buttonStyle, {backgroundColor: props.color}]}
+      onPress={props.pressFunction}>
       <Text style={styles.buttonTextStyle}>{props.title}</Text>
       {/* {props.children} */}
       {/* <Image source={require('./ic_action_name.png')} /> */}
     </TouchableOpacity>
-  )
-}
+  );
+};
